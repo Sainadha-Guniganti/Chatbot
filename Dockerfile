@@ -16,4 +16,7 @@ COPY src ./src
 RUN uv sync --frozen
 
 # Default command
-CMD ["uv", "run", "python", "-m", "chatbot"]
+EXPOSE 8000
+
+CMD ["uvicorn", "chatbot.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
