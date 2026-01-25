@@ -24,12 +24,12 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Login to ACR
-        run: az acr login --name ${{ var.ACR_SERVER }}
+        run: az acr login --name ${{ vars.ACR_SERVER }}
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ var.ACR_SERVER }}/chatbot:${{ github.sha }} .
+          docker build -t ${{ vars.ACR_SERVER }}/chatbot:${{ github.sha }} .
 
       - name: Push Docker image
         run: |
-          docker push ${{ var.ACR_SERVER }}/chatbot:${{ github.sha }}
+          docker push ${{ vars.ACR_SERVER }}/chatbot:${{ github.sha }}
