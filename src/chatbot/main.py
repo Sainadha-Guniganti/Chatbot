@@ -26,7 +26,7 @@ def health():
 # -------------------------
 token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default")
 
-endpoint= os.getenv("AZURE_OPENAI_ENDPOINT"),
+endpoint= os.getenv("AZURE_OPENAI_ENDPOINT")
 
 client = OpenAI(
     base_url=endpoint,
