@@ -28,18 +28,21 @@ AZURE_OPENAI_ENDPOINT= os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
 AZURE_OPENAI_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 MANAGED_IDENTITY_CLIENT_ID = os.getenv("MANAGED_IDENTITY_CLIENT_ID")
+COGNITIVE_SERVICE_SCOPE = os.getenv("COGNITIVE_SERVICE_SCOPE")
 
 
 credential = ManagedIdentityCredential(
     client_id=MANAGED_IDENTITY_CLIENT_ID
 )
 
-
+def token_provider():
+    token = credential.get_token(COGNITIVE_SERVICE_SCOPE)
+    return token.token
 
 client = AzureOpenAI(
     azure_endpoint=AZURE_OPENAI_ENDPOINT,
     api_version=AZURE_OPENAI_API_VERSION,
-    azure_ad_token_provider=credential.get_token
+    azure_ad_token_provider=token_provider
 )
 
 
