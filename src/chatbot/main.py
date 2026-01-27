@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import os
-from openai import OpenAI
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+from openai import AzureOpenAI
+from azure.identity import ManagedIdentityCredential
 
 # -------------------------
 # FastAPI App
@@ -24,16 +24,24 @@ def health():
 # -------------------------
 # Azure OpenAI Client
 # -------------------------
-token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default")
+AZURE_OPENAI_ENDPOINT= os.getenv("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
+AZURE_OPENAI_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
+MANAGED_IDENTITY_CLIENT_ID = os.getenv["MANAGED_IDENTITY_CLIENT_ID"]
 
-endpoint= os.getenv("AZURE_OPENAI_ENDPOINT")
 
-client = OpenAI(
-    base_url=endpoint,
-    api_key=token_provider
+credential = ManagedIdentityCredential(
+    client_id=MANAGED_IDENTITY_CLIENT_ID
 )
 
-DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT")
+
+
+client = AzureOpenAI(
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_version=AZURE_OPENAI_API_VERSION,
+    azure_ad_token_provider=credential.get_token
+)
+
 
 # -------------------------
 # Request / Response Models
@@ -54,13 +62,13 @@ def chat(request: ChatRequest):
 
     try:
         completion = client.chat.completions.create(
-            model=DEPLOYMENT_NAME,
+            model=AZURE_OPENAI_DEPLOYMENT_NAME,
             messages=[
                 {"role": "system", "content": "You are a helpful enterprise AI assistant."},
                 {"role": "user", "content": request.message}
             ],
             temperature=1,
-            max_completion_tokens=5000
+            max_tokens=5000
         )
 
         return ChatResponse(
