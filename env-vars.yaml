@@ -1,0 +1,58 @@
+properties:
+  template:
+    containers:
+      - name: chatbot
+        env:
+          # --- Azure OpenAI (Generation) ---
+          - name: AZURE_OPENAI_ENDPOINT
+            value: "https://dev-azure-openai-service-environment.openai.azure.com/"
+          - name: AZURE_OPENAI_API_VERSION
+            value: "2024-12-01-preview"
+          - name: AZURE_OPENAI_DEPLOYMENT_NAME
+            value: "gpt-4o"
+          - name: AZURE_OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: azure-openai-secrets  # Name of your Kubernetes Secret object
+                key: azure-openai-api-key   # Key inside that secret
+
+          # --- Managed Identity ---
+          - name: MANAGED_IDENTITY_CLIENT_ID
+            value: "007ac432-bd54-4da0-913d-9d6feb9dcb84"
+          - name: COGNITIVE_SERVICE_SCOPE
+            value: "https://cognitiveservices.azure.com/.default"
+
+          # --- Embedding Model ---
+          - name: OPENAI_TEXT_EMBEDDING_ENDPOINT
+            value: "https://dev-azure-openai-service-environment.openai.azure.com/"
+          - name: OPENAI_TEXT_EMBEDDING_API_VERSION
+            value: "2024-12-01-preview"
+          - name: OPENAI_TEXT_EMBEDDING_DEPLOYMENT_NAME
+            value: "text-embedding-3-large"
+          - name: SEARCH_SERVICE_SCOPE
+            value: "https://search.azure.com/.default"
+
+          # --- Chunking Config ---
+          - name: CHUNK_SIZE
+            value: 1000
+          - name: CHUNK_OVERLAP
+            value: 200
+
+          # --- Azure AI Search ---
+          - name: INDEX_ENDPOINT
+            value: "https://dev-ai-search-service.search.windows.net"
+          - name: KEY
+            valueFrom:
+              secretKeyRef:
+                name: azure-search-secrets  # Name of your Kubernetes Secret object
+                key: azure-search-key       # Key inside that secret
+          - name: INDEX_NAME
+            value: "openai-3-large-docs"
+          - name: VECTOR_DIMENSIONS
+            value: 3072
+
+          # --- Azure Storage ---
+          - name: CONTAINER_NAME
+            value: "chatbot-knowledge-base"
+          - name: ACCOUNT_URL
+            value: "https://devchatbotstorageact.blob.core.windows.net"

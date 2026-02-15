@@ -7,7 +7,25 @@ name = "chatbot"
 version = "0.1.0"
 description = "Enterprise GenAI Chatbot"
 requires-python = ">=3.13"
-dependencies = ["fastapi", "uvicorn", "openai", "pydantic", "azure-identity"]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "openai",
+    "pydantic",
+    "azure-identity",
+    "azure-search-documents>=11.6.0",
+    "dotenv>=0.9.9",
+    "loguru>=0.7.3",
+    "langchain-azure-storage>=1.0.0",
+    "langchain-community>=0.4.1",
+    "pypdf>=6.7.0",
+    "langchain>=1.2.10",
+    "tiktoken>=0.12.0",
+    "uuid>=1.30",
+    "langchain-openai>=1.1.9",
+    "pytest>=9.0.2",
+    "pydantic-settings[dotenv]>=2.12.0",
+]
 
 [project.optional-dependencies]
 dev = [
