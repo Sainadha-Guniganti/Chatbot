@@ -1,0 +1,5 @@
+## User Question:
+{query}
+
+## Retrieved Context
+{retrieved_context}

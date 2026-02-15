@@ -17,3 +17,4 @@ Thumbs.db
 
 #build-artifacts
 src/*.egg-info/
+.env

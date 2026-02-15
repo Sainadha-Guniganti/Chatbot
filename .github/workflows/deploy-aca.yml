@@ -28,10 +28,22 @@ jobs:
 
       - name: Show Azure Context
         run: az account show
+      
+      - name: Set ACA Secrets
+        run: |
+          az containerapp secret set \
+            --name ${{ vars.ACA_APP_NAME_DEV }} \
+            --resource-group ${{ vars.ACA_RESOURCE_GROUP }} \
+            --secrets \
+              azure-openai-api-key=${{ secrets.AZURE_OPENAI_API_KEY }} \
+              azure-search-key=${{ secrets.AZURE_SEARCH_KEY }}
+
 
       - name: Deploy image to Azure Container App (DEV)
         run: |
           az containerapp update \
             --name ${{ vars.ACA_APP_NAME_DEV }} \
             --resource-group ${{ vars.ACA_RESOURCE_GROUP }} \
-            --image ${{ vars.ACR_SERVER }}/chatbot:${{ github.event.workflow_run.head_sha }}
+            --image ${{ vars.ACR_SERVER }}/chatbot:${{ github.event.workflow_run.head_sha }} \
+             --yaml env-vars.yaml
+
