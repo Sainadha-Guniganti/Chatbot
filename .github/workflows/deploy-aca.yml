@@ -37,6 +37,9 @@ jobs:
             --secrets \
               azure-openai-api-key=${{ secrets.AZURE_OPENAI_API_KEY }} \
               azure-search-key=${{ secrets.AZURE_SEARCH_KEY }}
+      - name: Inject image into YAML
+        run: |
+          sed -i "s|IMAGE_PLACEHOLDER|${{ vars.ACR_SERVER }}/chatbot:${{ github.event.workflow_run.head_sha }}|g" deploy/env-vars.yaml
 
 
       - name: Deploy image to Azure Container App (DEV)
@@ -44,6 +47,5 @@ jobs:
           az containerapp update \
             --name ${{ vars.ACA_APP_NAME_DEV }} \
             --resource-group ${{ vars.ACA_RESOURCE_GROUP }} \
-            --image ${{ vars.ACR_SERVER }}/chatbot:${{ github.event.workflow_run.head_sha }} \
-             --yaml env-vars.yaml
+            --yaml env-vars.yaml
 

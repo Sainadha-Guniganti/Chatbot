@@ -2,6 +2,7 @@ properties:
   template:
     containers:
       - name: chatbot
+        image: IMAGE_PLACEHOLDER
         env:
           # --- Azure OpenAI (Generation) ---
           - name: AZURE_OPENAI_ENDPOINT
