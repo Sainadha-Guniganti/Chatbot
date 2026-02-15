@@ -39,7 +39,7 @@ jobs:
               azure-search-key=${{ secrets.AZURE_SEARCH_KEY }}
       - name: Inject image into YAML
         run: |
-          sed -i "s|IMAGE_PLACEHOLDER|${{ vars.ACR_SERVER }}/chatbot:${{ github.event.workflow_run.head_sha }}|g" env-vars.yaml
+          sed -i "s|IMAGE_PLACEHOLDER|${{ vars.ACR_SERVER }}/chatbot:${{ github.event.workflow_run.head_sha }}|g" src/build-deploy/env-vars.yaml
 
 
       - name: Deploy image to Azure Container App (DEV)
@@ -47,5 +47,5 @@ jobs:
           az containerapp update \
             --name ${{ vars.ACA_APP_NAME_DEV }} \
             --resource-group ${{ vars.ACA_RESOURCE_GROUP }} \
-            --yaml env-vars.yaml
+            --yaml src/build-deploy/env-vars.yaml
 
